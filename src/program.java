@@ -3,14 +3,11 @@ import DTO.Product;
 import DTO.UsedProduct;
 
 import java.lang.reflect.Method;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 public class program {
 
-    LinkedHashSet<Object> products = new LinkedHashSet<>();
+    List<Product> products = new ArrayList<>();
 
 
     public static void main(String[] args) {
@@ -83,29 +80,11 @@ public class program {
 
     protected void showProducts() {
 
-        Method method; // allows calling a method by name
-        Iterator<Object> iterator = products.iterator();
-        Optional<Object> firstElement = products.stream().findFirst();
-
-        //to get the first element of products collection
-
-        try {
-            method = firstElement.get().getClass().getMethod("priceTag");
-            System.out.println(method.invoke(firstElement.get()));
-        } catch (Exception e) {
-            System.out.println("error in first element iterator: " + e);
-        }
-
-        try {
-            //get the elements after the first
-            while (iterator.hasNext()) {
-                method = iterator.next().getClass().getMethod("priceTag");
-                System.out.println(method.invoke(iterator.next()));
-
-            }
-        } catch (Exception e) {
-            System.out.println("error in next iterator: " + e);
+        for(Product prod: products){
+            System.out.println(prod.priceTag());
         }
     }
-
 }
+
+
+
