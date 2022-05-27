@@ -2,20 +2,28 @@ import DTO.ImportedProduct;
 import DTO.Product;
 import DTO.UsedProduct;
 
+import java.lang.reflect.Method;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class program {
 
-    static Object vet[] = new Object[10];
+    LinkedHashSet<Object> products = new LinkedHashSet<>();
+
 
     public static void main(String[] args) {
-        insertProduct();
-
+        program pg = new program();
+        pg.insertProduct();
+        pg.showProducts();
 
 
     }
 
-    public static void insertProduct(){
+    protected void insertProduct() {
+
+
         int x;
         char type;
         String name;
@@ -25,11 +33,11 @@ public class program {
         do {
             System.out.print("Enter the number of products: ");
             x = sc.nextInt();
-        }while(x<=0);
+        } while (x <= 0);
 
-        for(int i = 0 ; i<x ; i++){
+        for (int i = 0; i < x; i++) {
 
-            System.out.println("\nProduct #"+Product.id+" data:");
+            System.out.println("\nProduct #" + Product.id + " data:");
 
             // c/u/i
             System.out.print("Common,used or imported (c/u/i)? ");
@@ -47,41 +55,56 @@ public class program {
             System.out.print("Price: ");
             price = sc.nextInt();
 
-            switch (type){
-                case 'c':
-                    vet[Product.id] = new Product(name,price);
-                    break;
+            switch (type) {
 
-                case 'u':
-                    int day,month,year;
-
+                case 'c' -> products.add(new Product(name, price));
+                case 'u' -> {
+                    int day, month, year;
                     System.out.println("Manufacture date:");
                     System.out.print("Day: ");
                     day = sc.nextInt();
-
                     System.out.print("Month: ");
                     month = sc.nextInt();
-
                     System.out.print("Year: ");
                     year = sc.nextInt();
-
-                    vet[Product.id] = new UsedProduct(name,price,day,month,year);
-                    break;
-
-                case 'i':
+                    products.add(new UsedProduct(name, price, day, month, year));
+                }
+                case 'i' -> {
                     double customFee;
                     System.out.print("Customs fee: ");
                     customFee = sc.nextDouble();
-                    vet[Product.id] = new ImportedProduct(name,price,customFee);
-                    break;
+                    products.add(new ImportedProduct(name, price, customFee));
+                }
             }
 
-
         }
+
     }
-    public void showProducts() throws NoSuchMethodException {
-        for (int i=0;i<vet.length;i++) {
-            System.out.println(vet[i].getClass().getMethod("priceTag",null));
+
+    protected void showProducts() {
+
+        Method method; // allows calling a method by name
+        Iterator<Object> iterator = products.iterator();
+        Optional<Object> firstElement = products.stream().findFirst();
+
+        //to get the first element of products collection
+
+        try {
+            method = firstElement.get().getClass().getMethod("priceTag");
+            System.out.println(method.invoke(firstElement.get()));
+        } catch (Exception e) {
+            System.out.println("error in first element iterator: " + e);
+        }
+
+        try {
+            //get the elements after the first
+            while (iterator.hasNext()) {
+                method = iterator.next().getClass().getMethod("priceTag");
+                System.out.println(method.invoke(iterator.next()));
+
+            }
+        } catch (Exception e) {
+            System.out.println("error in next iterator: " + e);
         }
     }
 
