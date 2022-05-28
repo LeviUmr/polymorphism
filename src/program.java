@@ -1,6 +1,7 @@
 import DTO.ImportedProduct;
 import DTO.Product;
 import DTO.UsedProduct;
+import View.SystemGUI;
 
 import java.util.*;
 
@@ -8,9 +9,8 @@ public class program {
     List<Product> products = new ArrayList<>();
 
     public static void main(String[] args) {
-        program pg = new program();
-        pg.insertProduct();
-        pg.showProducts();
+       new SystemGUI();
+
     }
 
     protected void insertProduct() {
@@ -20,23 +20,33 @@ public class program {
         double price;
         Scanner sc = new Scanner(System.in);
         do {
-            System.out.print("Enter the number of products: ");
+            System.out.print("Enter the number of products( 1-20 ): ");
             x = sc.nextInt();
-        } while (x <= 0);
-        for (int i = 0; i < x; i++) {
-            System.out.println("\nProduct #" + Product.id + " data:");
-            // c/u/i
+        } while (x <= 0 || x > 20);
+
+        for (int i = 1; i <= x; i++) {
+
+            System.out.println("\nProduct #" + i + " data:");
+
             System.out.print("Common,used or imported (c/u/i)? ");
             sc.nextLine();
             type = sc.nextLine().charAt(0);
-            //name
+
             System.out.print("Name: ");
             name = sc.nextLine();
-            //price
+
             System.out.print("Price: ");
             price = sc.nextInt();
             switch (type) {
-                case 'c' -> products.add(new Product(name, price));
+
+                case 'c' -> {
+                    try {
+                        products.add(new Product(name, price));
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }
+                }
+
                 case 'u' -> {
                     int day, month, year;
                     System.out.println("Manufacture date:");
@@ -46,19 +56,32 @@ public class program {
                     month = sc.nextInt();
                     System.out.print("Year: ");
                     year = sc.nextInt();
-                    products.add(new UsedProduct(name, price, day, month, year));
+
+                    try {
+                        products.add(new UsedProduct(name, price, day, month, year));
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }
+
                 }
+
                 case 'i' -> {
                     double customFee;
                     System.out.print("Customs fee: ");
                     customFee = sc.nextDouble();
-                    products.add(new ImportedProduct(name, price, customFee));
+                    try {
+                        products.add(new ImportedProduct(name, price, customFee));
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }
                 }
+
             }
         }
     }
 
     protected void showProducts() {
+        System.out.println("\nPrice Tag: ");
         for (Product prod : products) {
             System.out.println(prod.priceTag());
         }
