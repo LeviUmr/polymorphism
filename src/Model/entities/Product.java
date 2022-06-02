@@ -1,17 +1,20 @@
-package DTO;
+package Model.entities;
+
+import Model.exceptions.DomainException;
 
 public class Product {
     private String name;
     private double price;
     private int id;
 
-    public Product(String name, double price) {
+    public Product(String name, double price) throws DomainException{
 
         if (name.isEmpty()) {
-            throw new RuntimeException("Invalid name");
+            throw new DomainException("Invalid name");
 
-        } else if (price <= 0) {
-            throw new RuntimeException("The price must be greater than zero");
+        }
+        if (price <= 0) {
+            throw new DomainException("The price must be greater than zero");
         }
 
         this.name = name;

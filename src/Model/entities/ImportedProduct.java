@@ -1,17 +1,14 @@
-package DTO;
+package Model.entities;
+
+import Model.exceptions.DomainException;
 
 public class ImportedProduct extends Product {
     private double customsFee;
 
-    public ImportedProduct(String name, double price, double customsFee) {
+    public ImportedProduct(String name, double price, double customsFee) throws DomainException {
         super(name, price);
-
-        if (name.isEmpty()) {
-            throw new RuntimeException("Invalid name! ");
-        } else if (price <= 0) {
-            throw new RuntimeException("The price must be greater than zero! ");
-        }else if(customsFee<0){
-            throw new RuntimeException("Customs fee cannot be less than zero! ");
+        if(customsFee<0){
+            throw new DomainException("Customs fee cannot be less than zero! ");
         }
 
         this.customsFee = customsFee;

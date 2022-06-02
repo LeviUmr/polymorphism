@@ -1,13 +1,16 @@
 package View;
 
+import Model.entities.Product;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.EventListener;
+import java.util.ArrayList;
+import java.util.List;
 
-public class SystemGUI extends JFrame{
-
+public class SystemGUI extends JFrame implements ActionListener {
+    List<Product> products = new ArrayList<>();
 
     public SystemGUI() {
         this.setTitle("Polimorphysm");
@@ -148,38 +151,54 @@ public class SystemGUI extends JFrame{
         this.pack();
         this.setLocationRelativeTo(null);
 
-        MyClickListener click = new MyClickListener();
-        btnNext.addActionListener(click);
-        btnPrev.addActionListener(click);
-        btnClear.addActionListener(click);
-        btnRegisterPr.addActionListener(click);
+
+        btnNext.addActionListener(this);
+        btnPrev.addActionListener(this);
+        btnClear.addActionListener(this);
+        btnRegisterPr.addActionListener(this);
+
 
     }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
 
-    public class MyClickListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if (e.getSource() == "btnPrev") {
-
-                System.out.println("Prev");
-            }
-            if (e.getSource() == "btnNext") {
-
-                System.out.println("next");
-            }
-            if (e.getSource() == "btnClear") {
-
-                System.out.println("clear");
-            }
-            if (e.getSource() == "btnRegisterPr") {
-
-                System.out.println("register");
-            }
+        String action = e.getActionCommand();
+        switch (action) {
+            case "Clear":
+                clearInputs();
+                break;
+            case "Register Product":
+                register();
+                break;
+            case "Previous":
+                productView(1);
+                break;
+            case "Next":
+                productView(2);
+                break;
 
         }
 
     }
+
+    public void register() {
+
+    }
+
+    public void clearInputs() {
+
+    }
+
+
+
+    public void productView(int pos) {
+
+    }
+
+
+
+
 
 }
 
